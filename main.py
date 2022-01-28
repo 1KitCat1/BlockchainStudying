@@ -16,6 +16,15 @@ pairContract = web3.eth.contract(address=appdata.address_hoge, abi=appdata.abi_h
 # get liquidity pools
 [pooledETH, pooledHOGE, t] = pairContract.functions.getReserves().call()
 
+# try to update latest transaction
+last_block = web3.eth.get_block('latest')
+last_block_transactions = last_block['transactions']
+try:
+    appdata.transaction_hash = last_block_transactions[0]
+    print("Info about latest transaction updated")
+except:
+    print("No transaction in latest block. Using default transaction to calculate gas fees")
+
 # get transaction data
 transaction_info = web3.eth.getTransaction(appdata.transaction_hash)
 transaction_receipt = web3.eth.getTransactionReceipt(appdata.transaction_hash)
