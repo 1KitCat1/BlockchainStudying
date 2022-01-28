@@ -59,3 +59,14 @@ amount_eth_advers_after = amount_HOGE_adversarie_get * afterVic_price
 count_commission = float(web3.fromWei(amount_eth_advers_after, 'ether')) - 2*(adversaries_transaction * .03 + float(transaction_fee_eth)) - adversaries_transaction
 print("Amount of extra eth attacker gets back:  " + str(count_commission))
 
+for block_number in range(13679300, 13700000):
+    if block_number % 1 == 0:
+        print("Scanning block #" + str(block_number))
+    block = web3.eth.get_block(block_number)
+    transactions_in_block = block['transactions']
+    for transaction_hex in transactions_in_block:
+        transaction_info = web3.eth.get_transaction(transaction_hex)
+        transaction_contract = transaction_info['to']
+        if transaction_contract == appdata.address_hoge:
+            print("\nFind contract tansaction in block " + str(block_number))
+            print(transaction_info)
